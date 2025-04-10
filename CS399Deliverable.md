@@ -97,7 +97,7 @@
 # GenAI Usage Explained
 
 ## User Stories
-We used AI to assit in generating an initial set of six user stories, each structured according to industry-standard formatting. The AI provided a solid foundations, ensuring consistency and coverage across various user roles and goals. After generating the stories, our team reviewed each one andd made thoughtful adjustments refining the language, clarifying intent, and adding or modifying elements to better align with our product vision and user needs. 
+We used AI to assit in generating an initial set of six user stories, each structured according to industry-standard formatting. Then we had to prompt the AI to build the User Stories with 2-3 Acceptance criteria and also with the standard of a Given...When...Then format for the Acceptance Criteria. Then after that it still didnt have the user story built with a As a...I want...So that... So we had AI build in that format and once that was done we had it translate the user story format into markdown since we couldnt figure out how to get it to work in markdown. 
 
 
 <br>
