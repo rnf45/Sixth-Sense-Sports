@@ -92,7 +92,43 @@
 
 # Sixth-Sense-Sports - Journey Maps
 
----
+ User Journey Map 1: Casual Sports Bettor Viewing a Prediction
+User Persona: Casual Sports Bettor
+Goal: Explore a game and view a probability prediction to make a more informed decision.
+journey
+    section Step 1: Browsing the Site
+      Visits homepage: 5:🙂
+      Scrolls through upcoming games: 4:🙂
+    section Step 2: Selecting a Game
+      Clicks on a game of interest: 4:🙂
+      Sees betting options and AI-generated probability: 5:🤩
+    section Step 3: Interpreting the Prediction
+      Views percentage prediction: 5:🙂
+      Wonders how it was calculated: 3:😐
+    section Step 4: Exploring More
+      Clicks “View Insights” for explanation: 4:🙂
+      Reviews contributing factors: 4:🙂
+    section Step 5: Deciding Next Steps
+      Decides to try another game or register to save predictions: 4:🙂
+
+User Journey Map 2
+User Persona: Returning Registered User
+Goal: Monitor saved bets and receive alerts when predictions change.
+journey
+    section Step 1: Log In and View Dashboard
+      Logs into account: 5:🙂
+      Navigates to “Saved Bets”: 5:🙂
+      Sees current probabilities: 5:🙂
+    section Step 2: Monitoring Predictions
+      Notices one prediction changed significantly: 4:😮
+    section Step 3: Notification Triggered
+      Gets push/email alert for >10% change: 5:🙂
+      Clicks notification to view update: 5:🙂
+    section Step 4: Taking Action
+      Opens bet detail page: 5:🙂
+      Re-evaluates whether to place a real bet: 4:🤔
+
+
 
 # GenAI Usage Explained
 
