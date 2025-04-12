@@ -135,6 +135,8 @@ journey
 ## User Stories
 We used AI to assit in generating an initial set of six user stories, each structured according to industry-standard formatting. Then we had to prompt the AI to build the User Stories with 2-3 Acceptance criteria and also with the standard of a Given...When...Then format for the Acceptance Criteria. Then after that it still didnt have the user story built with a As a...I want...So that... So we had AI build in that format and once that was done we had it translate the user story format into markdown since we couldnt figure out how to get it to work in markdown. 
 
+For this project, I used ChatGPT as a supporting tool. First, I provided a project overview and the system's key objectives (a sports predictions platform with features for both casual and registered users). From that context, I asked for suggestions for user stories and journey maps focused on different types of users. I refined the initial responses by adjusting the language, clarifying the actions, and ensuring each story followed the "How..., I want..., so that..." format, as well as including clear and measurable acceptance criteria. To verify quality and consistency, I compared each story and map to the project requirements and checked that they aligned with the proposed features.
+
 
 <br>
 This collaborative approach allowed us to balance the efficiency of AI with the insight and creativity of our team, resulting in high-quality user stories tailored specifically to our project. 
