@@ -188,4 +188,52 @@
   }
   
   
+  .ia-section {
+    background-color: rgba(255, 255, 255, 0.03);
+    margin: 2rem;
+    padding: 1.5rem;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 12px rgba(155, 89, 182, 0.15);
+  }
+  
+  .ia-section h2 {
+    color: #ffffff;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+  }
+  
+  .ia-section button {
+    padding: 0.5rem 1.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    background-color: #9b59b6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-top: 0.5rem;
+  }
+  
+  .ia-section button:hover {
+    background-color: #8e44ad;
+  }
+  
+  .ia-result {
+    margin-top: 1.5rem;
+    text-align: left;
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 1rem;
+    border-radius: 10px;
+  }
+  
+  .ia-result p {
+    font-size: 1rem;
+    margin: 0.5rem 0;
+  }
+  
+  .ia-result strong {
+    color: #f1c40f;
+  }
   
