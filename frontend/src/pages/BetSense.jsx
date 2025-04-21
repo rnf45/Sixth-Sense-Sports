@@ -10,8 +10,11 @@ const BetSense = () => {
   const [selectedPropType, setSelectedPropType] = useState(null);
   const [selectedStatType, setSelectedStatType] = useState(null);
 
-  // IA states
-  const [mejorApuesta, setMejorApuesta] = useState(null);
+  // IA avanzada
+  const [tipoApuesta, setTipoApuesta] = useState('moneyline');
+  const [minProbabilidad, setMinProbabilidad] = useState(0.0);
+  const [topN, setTopN] = useState(3);
+  const [recomendaciones, setRecomendaciones] = useState([]);
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState(null);
 
@@ -29,41 +32,31 @@ const BetSense = () => {
     }
   };
 
-  const handleSelectGame = (game) => {
-    setSelectedGame(game);
-  };
-
-  const handleSelectPropType = (prop_type) => {
-    setSelectedPropType(prop_type);
-  };
-
-  const handleSelectStatType = (stat_type) => {
-    setSelectedStatType(stat_type);
-  };
-
-  const consultarIA = async () => {
+  const consultarRecomendacion = async () => {
     setCargando(true);
     setError(null);
     try {
-      const response = await fetch('http://127.0.0.1:8000/mejor-apuesta', {
+      const response = await fetch('http://127.0.0.1:8000/recomendar', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(mockGames.map((g) => ({
-          equipoA: g.team1,
-          equipoB: g.team2,
-          probA: g.probA ?? 0.5,
-          probB: g.probB ?? 0.5
-        })))
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          tipo: tipoApuesta,
+          min_probabilidad: parseFloat(minProbabilidad),
+          top_n: parseInt(topN),
+          juegos: mockGames.map((g) => ({
+            equipoA: g.team1,
+            equipoB: g.team2,
+            probA: g.probA ?? 0.5,
+            probB: g.probB ?? 0.5,
+            spread: g.spread,
+            total: g.total
+          }))
+        })
       });
 
-      if (!response.ok) {
-        throw new Error('Error al consultar la IA');
-      }
-
+      if (!response.ok) throw new Error('Error al consultar la IA');
       const data = await response.json();
-      setMejorApuesta(data);
+      setRecomendaciones(data.recomendaciones);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -73,10 +66,8 @@ const BetSense = () => {
 
   return (
     <div className="betsense-page">
-      <header className="betsense-header">
-      </header>
-
-      <div className='betsense-main'>
+      <div className="betsense-main">
+        {/* Carrusel */}
         <div className="carousel-outer">
           <button className="carousel-arrow left" onClick={() => scrollCarousel('left')}>&lt;</button>
           <div className="carousel-wrapper">
@@ -86,7 +77,7 @@ const BetSense = () => {
                   <div
                     key={game.id}
                     className={`game-card ${selectedGame?.id === game.id ? 'selected' : ''}`}
-                    onClick={() => handleSelectGame(game)}
+                    onClick={() => setSelectedGame(game)}
                   >
                     <h3>{game.team1} vs {game.team2}</h3>
                     <p><strong>Date:</strong> {game.date}</p>
@@ -101,87 +92,58 @@ const BetSense = () => {
           <button className="carousel-arrow right" onClick={() => scrollCarousel('right')}>&gt;</button>
         </div>
 
-        <div className='interactive-wrapper'>
-          {/* Left: Prop Type Menu & Display */}
-          <div className='props-section'>
-            <div className='interactive-menu'>
-              <h1>Props</h1>
-              <button
-                className={`interactive-tab ${selectedPropType === 'Game' ? 'active' : ''}`}
-                onClick={() => setSelectedPropType('Game')}
-              >
-                Game
-              </button>
-
-              <button
-                className={`interactive-tab ${selectedPropType === 'Players' ? 'active' : ''}`}
-                onClick={() => setSelectedPropType('Players')}
-              >
-                Players
-              </button>
-
-              <button
-                className={`interactive-tab ${selectedPropType === 'Touchdown Scorers' ? 'active' : ''}`}
-                onClick={() => setSelectedPropType('Touchdown Scorers')}
-              >
-                Touchdown Scorers
-              </button>
-            </div>
-
-            <div className='props-display'>
-              <p>No prop selected yet.</p>
-            </div>
-          </div>
-
-          {/* Right: Stats menu & Display */}
-          <div className='stats-section'>
-            <div className='interactive-menu'>
-              <h1>Stats</h1>
-              <button
-                className={`interactive-tab ${selectedStatType === 'Team' ? 'active' : ''}`}
-                onClick={() => setSelectedStatType('Team')}
-              >
-                Team
-              </button>
-
-              <button
-                className={`interactive-tab ${selectedStatType === 'Players' ? 'active' : ''}`}
-                onClick={() => setSelectedStatType('Players')}
-              >
-                Players
-              </button>
-
-              <button
-                className={`interactive-tab ${selectedStatType === 'Insights' ? 'active' : ''}`}
-                onClick={() => setSelectedStatType('Insights')}
-              >
-                Insights
-              </button>
-            </div>
-
-            <div className='stats-display'>
-              <p>No prop selected yet.</p>
-            </div>
-          </div>
-        </div>
-
-        {/* IA Section */}
+        {/* IA Avanzada */}
         <div className="ia-section">
-          <h2>Consulta IA</h2>
-          <button onClick={consultarIA} disabled={cargando}>
-            {cargando ? 'Consultando...' : '📊 Calcular mejor apuesta'}
+          <h2>Recomendación de IA</h2>
+
+          <label>Tipo de apuesta:</label>
+          <select value={tipoApuesta} onChange={(e) => setTipoApuesta(e.target.value)}>
+            <option value="moneyline">Ganador Directo (Moneyline)</option>
+            <option value="spread">Spread</option>
+            <option value="total">Total (Over/Under)</option>
+            <option value="arriesgada">Apuesta Arriesgada</option>
+          </select>
+
+          <div style={{ marginTop: '1rem' }}>
+            <label>Probabilidad mínima (%): </label>
+            <input
+              type="number"
+              value={minProbabilidad}
+              min="0"
+              max="1"
+              step="0.01"
+              onChange={(e) => setMinProbabilidad(e.target.value)}
+            />
+          </div>
+
+          <div style={{ marginTop: '1rem' }}>
+            <label>¿Cuántas recomendaciones? </label>
+            <input
+              type="number"
+              value={topN}
+              min="1"
+              max="10"
+              onChange={(e) => setTopN(e.target.value)}
+            />
+          </div>
+
+          <br />
+          <button onClick={consultarRecomendacion} disabled={cargando}>
+            {cargando ? 'Consultando...' : '📊 Obtener recomendaciones'}
           </button>
 
           {error && <p style={{ color: 'red' }}>{error}</p>}
 
-          {mejorApuesta && (
+          {recomendaciones.length > 0 && (
             <div className="ia-result">
-              <h3>Resultado IA:</h3>
-              <p><strong>Ganador sugerido:</strong> {mejorApuesta.equipo_ganador}</p>
-              <p><strong>Probabilidad:</strong> {mejorApuesta.probabilidad}</p>
-              <p>
-                <strong>Juego:</strong> {mejorApuesta.juego.equipoA} vs {mejorApuesta.juego.equipoB}
-              </p>
+              <h3>Resultados IA</h3>
+              {recomendaciones.map((rec, index) => (
+                <div key={index} className="ia-card">
+                  <p><strong>Juego:</strong> {rec.juego.equipoA} vs {rec.juego.equipoB}</p>
+                  <p><strong>Explicación:</strong> {rec.explicacion}</p>
+                  <p><strong>Puntaje:</strong> {rec.puntaje.toFixed(2)}</p>
+                </div>
+              ))}
             </div>
           )}
         </div>
